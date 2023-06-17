@@ -1,4 +1,4 @@
-import { TextInput } from '@react-native-material/core';
+import { TextInput, ListItem  } from '@react-native-material/core';
 import React, {useState, useEffect} from 'react';
 import { Text, SafeAreaView, StatusBar, View, TouchableHighlight } from 'react-native';
 
@@ -13,6 +13,9 @@ const FoodDatabaseScreen = () => {
   const [foodList, setFoodList] = useState([]);
   const [nutritionData, setNutritionData] = useState(null);
 
+  // User selected food
+  const [foodSelection, setFoodSelection] = useState('');
+
   const regex = /^[a-zA-Z]+$/;
 
   async function callAPIAutoComplete(searchStr){
@@ -26,16 +29,15 @@ const FoodDatabaseScreen = () => {
   };
 
   async function onPressResult(index){
-    console.log('Button pressed, index : ' + index);
+    console.log('Food choosen : ' + foodList[index]);
+    setFoodSelection(foodList[index]);
+    setSearchContent(''); // Not working properly
+    setFoodList([]);
   };
   
   function renderSearchResult(lst){
     return lst.map((str, index) => {
-      return (
-        <TouchableHighlight onPress={() => onPressResult(index)} underlayColor="blue" key={index}>
-          <Text>{str}</Text>
-        </TouchableHighlight>
-      );
+      return <ListItem title={str} key={index} onPress={() => onPressResult(index)} />;
     });
   };
 
@@ -52,8 +54,13 @@ const FoodDatabaseScreen = () => {
   return (
     <SafeAreaView>
       <Text>FoodDatabaseScreen</Text>
+      
       <TextInput placeholder="" onChangeText={(str) => setSearchContent(str)} />
       <View>{renderSearchResult(foodList)}</View>
+      
+      
+      
+      
       <StatusBar />
     </SafeAreaView>
   );
