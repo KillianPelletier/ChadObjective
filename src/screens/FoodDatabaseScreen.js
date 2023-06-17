@@ -1,6 +1,6 @@
 import { TextInput } from '@react-native-material/core';
 import React, {useState, useEffect} from 'react';
-import { Text, SafeAreaView, StatusBar } from 'react-native';
+import { Text, SafeAreaView, StatusBar, View, TouchableHighlight } from 'react-native';
 
 import CallAPI from '../services/callAPI';
 
@@ -23,13 +23,28 @@ const FoodDatabaseScreen = () => {
     //console.log(result);
     setFoodList(result);
     return result;
-  }
+  };
+
+  async function onPressResult(index){
+    console.log('Button pressed, index : ' + index);
+  };
   
+  function renderSearchResult(lst){
+    return lst.map((str, index) => {
+      return (
+        <TouchableHighlight onPress={() => onPressResult(index)} underlayColor="blue" key={index}>
+          <Text>{str}</Text>
+        </TouchableHighlight>
+      );
+    });
+  };
+
   useEffect(() => {
     if (!searchContent) return;
     if (searchContent.match(regex)) {
       callAPIAutoComplete(searchContent);
     } else {
+      setFoodList([]);
       console.log('Wrong search');
     }
   }, [searchContent]);
@@ -38,12 +53,11 @@ const FoodDatabaseScreen = () => {
     <SafeAreaView>
       <Text>FoodDatabaseScreen</Text>
       <TextInput placeholder="" onChangeText={(str) => setSearchContent(str)} />
-      {foodList.map((item,index)=>{
-         return <Text>{{item}}</Text>
-     })}
+      <View>{renderSearchResult(foodList)}</View>
       <StatusBar />
     </SafeAreaView>
   );
 };
 
 export default FoodDatabaseScreen;
+  
