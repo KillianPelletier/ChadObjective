@@ -57,8 +57,12 @@ const FoodDatabaseScreen = () => {
     console.log("Here");
     return (
       <View>
-        <Text>{foodSelection}</Text>
-        <Text>{nutritionData.calories} cal per 100g</Text>
+        <Text>{foodSelection}, per 100g</Text>
+        <Text>Energy {nutritionData.calories} kcal</Text>
+        <Text>Protein {nutritionData.totalNutrients.PROCNT.quantity} g</Text>
+        <Text>Sugar {nutritionData.totalNutrients.SUGAR.quantity} g</Text>
+        <Text>Lipid {nutritionData.totalNutrients.FAT.quantity} g</Text>
+        <Text>Sodium {nutritionData.totalNutrients.NA.quantity/1000} g</Text>
       </View>
     );
   };
