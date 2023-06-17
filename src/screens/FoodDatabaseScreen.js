@@ -11,7 +11,7 @@ const FoodDatabaseScreen = () => {
 
   // API result
   const [foodList, setFoodList] = useState([]);
-  const [nutritionData, setNutritionData] = useState(null);
+  const [nutritionData, setNutritionData] = useState({});
 
   // User selected food
   const [foodSelection, setFoodSelection] = useState('');
@@ -28,6 +28,16 @@ const FoodDatabaseScreen = () => {
     return result;
   };
 
+  async function callAPINutritionData(foodStr){
+    const url = 'https://api.edamam.com/api/nutrition-data';
+    const queryParameters =
+      'app_id=20a4ae44&app_key=7a532b9cbfe185d11b01cc02e5d2f758&nutrition-type=logging&ingr=100g ' + foodStr;
+    let result = await CallAPI(url, queryParameters);
+    //console.log(result);
+    setNutritionData(result);
+    return result;
+  };
+
   async function onPressResult(index){
     console.log('Food choosen : ' + foodList[index]);
     setFoodSelection(foodList[index]);
@@ -41,6 +51,18 @@ const FoodDatabaseScreen = () => {
     });
   };
 
+  function renderNutritionData(){
+    console.log(nutritionData);
+    if(!Object.entries(nutritionData).length) return;
+    console.log("Here");
+    return (
+      <View>
+        <Text>{foodSelection}</Text>
+        <Text>{nutritionData.calories} cal per 100g</Text>
+      </View>
+    );
+  };
+
   useEffect(() => {
     if (!searchContent) return;
     if (searchContent.match(regex)) {
@@ -51,6 +73,11 @@ const FoodDatabaseScreen = () => {
     }
   }, [searchContent]);
 
+  useEffect(()=> {
+    if (!foodSelection) return;
+    callAPINutritionData(foodSelection);
+  }, [foodSelection]);
+
   return (
     <SafeAreaView>
       <Text>FoodDatabaseScreen</Text>
@@ -58,8 +85,7 @@ const FoodDatabaseScreen = () => {
       <TextInput placeholder="" onChangeText={(str) => setSearchContent(str)} />
       <View>{renderSearchResult(foodList)}</View>
       
-      
-      
+      <View>{renderNutritionData()}</View>
       
       <StatusBar />
     </SafeAreaView>
