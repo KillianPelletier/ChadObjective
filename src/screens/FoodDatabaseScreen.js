@@ -1,8 +1,9 @@
 import { TextInput, ListItem  } from '@react-native-material/core';
 import React, {useState, useEffect} from 'react';
-import { Text, SafeAreaView, StatusBar, View, TouchableHighlight } from 'react-native';
+import { Text, SafeAreaView, StatusBar, View, ScrollView } from 'react-native';
 
 import CallAPI from '../services/callAPI';
+import AddFoodForm from '../components/AddFoodForm';
 
 
 const FoodDatabaseScreen = () => {
@@ -32,16 +33,23 @@ const FoodDatabaseScreen = () => {
     const url = 'https://api.edamam.com/api/nutrition-data';
     const queryParameters =
       'app_id=20a4ae44&app_key=7a532b9cbfe185d11b01cc02e5d2f758&nutrition-type=logging&ingr=100g ' + foodStr;
-    let result = await CallAPI(url, queryParameters);
+    let r = await CallAPI(url, queryParameters);
     //console.log(result);
-    setNutritionData(result);
-    return result;
+    let data = {
+      name: foodSelection,
+      calories: r.calories,
+      protein: r.totalNutrients.PROCNT.quantity,
+      sugar: r.totalNutrients.SUGAR.quantity,
+      fat: r.totalNutrients.FAT.quantity,
+      sodium: r.totalNutrients.NA.quantity / 1000,
+    };
+    setNutritionData(data);
   };
 
   async function onPressResult(index){
     console.log('Food choosen : ' + foodList[index]);
     setFoodSelection(foodList[index]);
-    setSearchContent(''); // Not working properly
+    setSearchContent('');
     setFoodList([]);
   };
   
@@ -52,17 +60,15 @@ const FoodDatabaseScreen = () => {
   };
 
   function renderNutritionData(){
-    console.log(nutritionData);
     if(!Object.entries(nutritionData).length) return;
-    console.log("Here");
     return (
       <View>
         <Text>{foodSelection}, per 100g</Text>
         <Text>Energy {nutritionData.calories} kcal</Text>
-        <Text>Protein {nutritionData.totalNutrients.PROCNT.quantity} g</Text>
-        <Text>Sugar {nutritionData.totalNutrients.SUGAR.quantity} g</Text>
-        <Text>Lipid {nutritionData.totalNutrients.FAT.quantity} g</Text>
-        <Text>Sodium {nutritionData.totalNutrients.NA.quantity/1000} g</Text>
+        <Text>Protein {nutritionData.protein} g</Text>
+        <Text>Sugar {nutritionData.sugar} g</Text>
+        <Text>Lipid {nutritionData.fat} g</Text>
+        <Text>Sodium {nutritionData.sodium} g</Text>
       </View>
     );
   };
@@ -84,14 +90,17 @@ const FoodDatabaseScreen = () => {
 
   return (
     <SafeAreaView>
-      <Text>FoodDatabaseScreen</Text>
-      
-      <TextInput placeholder="" onChangeText={(str) => setSearchContent(str)} />
-      <View>{renderSearchResult(foodList)}</View>
-      
-      <View>{renderNutritionData()}</View>
-      
-      <StatusBar />
+      <ScrollView>
+        <Text>FoodDatabaseScreen</Text>
+        
+        <TextInput placeholder="" onChangeText={(str) => setSearchContent(str)} />
+        <View>{renderSearchResult(foodList)}</View>
+        
+        <View>{renderNutritionData()}</View>
+        
+        <AddFoodForm nutritionData={nutritionData}/>
+        <StatusBar />
+      </ScrollView>
     </SafeAreaView>
   );
 };
