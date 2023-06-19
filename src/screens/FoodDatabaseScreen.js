@@ -103,7 +103,7 @@ const FoodDatabaseScreen = () => {
             onChangeText={(str) => onChangeText(str)}
             style={{ ...styles.inputText, width: '75%' }}
           />
-          {foodList.length > 0 ? (
+          {foodList.length > 0 && !searchValid ? (
             <ScrollView style={{ width: '60%', maxHeight: '50%' }}>
               {renderSearchResult(foodList)}
             </ScrollView>
