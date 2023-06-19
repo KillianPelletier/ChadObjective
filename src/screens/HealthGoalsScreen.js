@@ -63,7 +63,8 @@ const HealthGoalsScreen = () => {
       <ModalHealthGoal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        bmr={getBMRfromform()}></ModalHealthGoal>
+        bmr={getBMRfromform()}
+      />
       <SafeAreaView>
         <ScrollView>
           <Text style={styles.inputText} variant="overline">
@@ -138,7 +139,6 @@ const HealthGoalsScreen = () => {
             <Picker.Item label="Weight maintenance" value="maintenance" />
             <Picker.Item label="Weight gain" value="gain" />
           </Picker>
-          <StatusBar />
           <Button
             style={styles.inputText}
             onPress={this._submitForm}
@@ -156,6 +156,7 @@ const HealthGoalsScreen = () => {
             }
           />
         </ScrollView>
+        <StatusBar />
       </SafeAreaView>
     </>
   );

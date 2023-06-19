@@ -8,7 +8,8 @@ const ModalHealthGoal = ({ modalVisible, setModalVisible, bmr }) => {
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Your BMR (Basal Metabolic Rate) is {bmr}</Text>
+            <Text style={{ ...styles.titleStyle, ...styles.modalText }}>BMR result</Text>
+            <Text style={styles.modalText}>Your BMR is {bmr.toFixed(0)}</Text>
             <Button
               style={styles.inputText}
               onPress={() => setModalVisible(false)}
@@ -43,25 +44,14 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+  },
+  titleStyle: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: '5%',
   },
 });
 export default ModalHealthGoal;

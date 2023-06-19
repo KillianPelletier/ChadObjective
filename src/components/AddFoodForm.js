@@ -1,39 +1,42 @@
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TextInput, Button } from '@react-native-material/core';
+import { TextInput, Button, Text } from '@react-native-material/core';
 import { Picker } from '@react-native-picker/picker';
-import React, {useState} from 'react';
-import { Text, View, StyleSheet, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, Platform } from 'react-native';
 
-
-const AddFoodForm = (props) => {
+const AddFoodForm = ({ nutritionData, openForm, setOpenForm }) => {
   // Food quantiy
   const [quantity, setQuantity] = useState(0);
 
   // Meal choice
-  const [meal, setMeal] = useState("breakfast");
+  const [meal, setMeal] = useState('breakfast');
 
   // Day choice
-  const [day, setDay] = useState("monday");
+  const [day, setDay] = useState('monday');
 
-  async function handleSubmit(event){
-    let newData = { ...props.nutritionData };
+  async function handleSubmit(event) {
+    let newData = { ...nutritionData };
     newData.quantity = quantity;
 
     let planning = {};
     planning[day] = {};
-    planning[day][meal] = [{...newData}];
+    planning[day][meal] = [{ ...newData }];
     await AsyncStorage.mergeItem('planning', JSON.stringify(planning));
     //await AsyncStorage.removeItem('planning');
     let value = await AsyncStorage.getItem('planning');
     console.log(JSON.parse(value)); // Prints 'John Doe'
+  }
+
+  goBack = () => {
+    setOpenForm(false);
   };
 
-  if (!props.nutritionData) return;
+  if (!nutritionData) return;
   return (
     <View>
       <Text style={styles.inputText} variant="overline">
-        Quantity of {props.nutritionData.name}
+        Quantity of {nutritionData.name}
       </Text>
       <TextInput
         style={styles.inputLayout}
@@ -80,6 +83,11 @@ const AddFoodForm = (props) => {
         onPress={handleSubmit}
         disabled={!quantity}
       />
+      <Button
+        style={{ ...styles.inputText, ...styles.buttonClose }}
+        title="Go back"
+        onPress={this.goBack}
+      />
     </View>
   );
 };
@@ -87,27 +95,35 @@ const AddFoodForm = (props) => {
 const styles = StyleSheet.create({
   inputText: {
     marginBottom: '5%',
-      marginTop: '5%',
-      marginLeft: '5%',
-      marginRight: '5%',
-    },
-  
-    inputPickerAndroid: {
-      marginLeft: '3%',
-      marginRight: '3%',
-      marginTop: '-2%',
-      marginBottom: '-2%',
-    },
-  
-    inputPickerIos: {
-      marginTop: '-20%',
-    },
-  
-    inputLayout: {
-      marginRight: '5%',
-      marginLeft: '5%',
-    },
-  });
+    marginTop: '5%',
+    marginLeft: '5%',
+    marginRight: '5%',
+  },
+  buttonClose: {
+    backgroundColor: '#FF0000',
+  },
+  inputTextIos: {
+    marginBottom: '5%',
+    marginTop: '-5%',
+    marginLeft: '5%',
+    marginRight: '5%',
+  },
 
+  inputPickerAndroid: {
+    marginLeft: '3%',
+    marginRight: '3%',
+    marginTop: '-2%',
+    marginBottom: '-2%',
+  },
+
+  inputPickerIos: {
+    marginTop: '-10%',
+  },
+
+  inputLayout: {
+    marginRight: '5%',
+    marginLeft: '5%',
+  },
+});
 
 export default AddFoodForm;
