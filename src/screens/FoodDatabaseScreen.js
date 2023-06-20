@@ -27,7 +27,6 @@ const FoodDatabaseScreen = () => {
     const queryParameters =
       'app_id=b9405721&app_key=2cdd47649979ed551a3e136c3c21b991&limit=5&q=' + searchStr;
     let result = await CallAPI(url, queryParameters);
-    //console.log(result);
     setFoodList(result);
     return result;
   }
@@ -103,7 +102,7 @@ const FoodDatabaseScreen = () => {
             onChangeText={(str) => onChangeText(str)}
             style={{ ...styles.inputText, width: '75%' }}
           />
-          {foodList.length > 0 && !searchValid ? (
+          {foodList.length > 0 ? (
             <ScrollView style={{ width: '60%', maxHeight: '50%' }}>
               {renderSearchResult(foodList)}
             </ScrollView>

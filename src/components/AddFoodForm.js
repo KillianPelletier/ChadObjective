@@ -16,16 +16,25 @@ const AddFoodForm = ({ nutritionData, openForm, setOpenForm }) => {
   const [day, setDay] = useState('monday');
 
   async function handleSubmit(event) {
+    // await AsyncStorage.removeItem('planning');
     let newData = { ...nutritionData };
     newData.quantity = quantity;
 
     let planning = {};
     planning[day] = {};
-    planning[day][meal] = [{ ...newData }];
-    await AsyncStorage.mergeItem('planning', JSON.stringify(planning));
-    //await AsyncStorage.removeItem('planning');
     let value = await AsyncStorage.getItem('planning');
-    console.log(JSON.parse(value)); // Prints 'John Doe'
+    if (value !== null) {
+      value = JSON.parse(value);
+      if (value.hasOwnProperty(day) && value[day].hasOwnProperty(meal)) {
+        planning[day][meal] = [...value[day][meal], { ...newData }];
+      } else {
+        planning[day][meal] = [{ ...newData }];
+      }
+    } else {
+      planning[day][meal] = [{ ...newData }];
+    }
+
+    await AsyncStorage.mergeItem('planning', JSON.stringify(planning));
   }
 
   goBack = () => {
