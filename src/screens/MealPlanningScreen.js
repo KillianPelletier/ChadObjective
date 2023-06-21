@@ -18,8 +18,6 @@ const MealPlanningScreen = ({ navigation }) => {
   const fetchData = async () => {
     try {
       let value = await AsyncStorage.getItem('planning');
-
-      console.log(value);
       if (value !== null) {
         value = JSON.parse(value);
         if (Object.keys(value).length > 0) {

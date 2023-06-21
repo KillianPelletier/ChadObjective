@@ -51,7 +51,7 @@ const AddFoodForm = ({ nutritionData, openForm, setOpenForm }) => {
         style={styles.inputLayout}
         variant="standard"
         placeholder="Enter the quantity in gram"
-        leading={(props) => <Icon name="account" {...props} />}
+        leading={(props) => <Icon name="silverware-fork-knife" {...props} />}
         onChangeText={(value) => setQuantity(value)}
         keyboardType="numeric"
       />

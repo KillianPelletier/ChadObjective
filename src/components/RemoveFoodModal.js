@@ -28,7 +28,6 @@ const RemoveFoodModal = ({
     if (newData.length === 0) {
       let data = await AsyncStorage.getItem('planning');
       data = JSON.parse(data);
-      console.log(data);
       delete data[day][meal];
       if (Object.keys(data[day]).length === 0) {
         delete data[day];
